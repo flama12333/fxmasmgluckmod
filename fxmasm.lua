@@ -2,7 +2,7 @@
 -- FXM AY file disassembler / assembler
 -- fuka@fuxoft.cz
 -- [[[[*<= Version '20190311b' =>*]]]]
--- Modified to export hex melody notes to txt file
+-- Modified to export hex melody notes to txt file - (incomplete)
 
 _G.debug = function(...) print(...) end
 
@@ -143,14 +143,15 @@ local function disasm(fname)
             debug("parse mode", hexword(addr), mode, hexbyte(peek(addr)))
 
             if mode == "melody" then
-    local byt1 = peek(addr)
-    if byt1 < 128 then --note
-        local len = peek(addr + 1)
-        local adjusted_len = len + 0x80  -- Shift duration to 80-FF
-        table.insert(melody_output, string.format("%02x %02x", byt1, adjusted_len))
-        addr = addr + 2
-    
+                local byt1 = peek(addr)
+                if byt1 < 128 then --note
+                    -- Store the hex note and length
+                    local len = peek(addr + 1)
+					local adjusted_len = len + 0x80 
 
+					    table.insert(melody_output, string.format("%02x %02x", byt1, adjusted_len))
+
+                    addr = addr + 2
                 else
                     local opcode = opcodes[peek(addr)]
                     if not opcode then
